@@ -28,7 +28,10 @@ public class VehicleDao {
             preparedStatement.setString(6, vehicle.getColor());
             preparedStatement.setString(7, vehicle.getVehicleType());
             preparedStatement.setInt(8, vehicle.getOdometer());
-            preparedStatement.set
+            preparedStatement.setDouble(9, vehicle.getPrice());
+
+            int rows = preparedStatement.executeUpdate();
+            System.out.println(rows + " rows affected!");
         }
         catch (Exception ex){
             ex.printStackTrace();
@@ -37,6 +40,17 @@ public class VehicleDao {
 
     public void removeVehicle(String VIN) {
         // TODO: Implement the logic to remove a vehicle
+        String query = "DELETE FROM vehicles WHERE VIN = ?";
+
+        try (Connection connection = dataSource.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, VIN);
+
+            int rows = preparedStatement.executeUpdate();
+            System.out.println(rows + " rows affected!");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public List<Vehicle> searchByPriceRange(double minPrice, double maxPrice) {
